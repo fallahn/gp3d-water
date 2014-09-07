@@ -80,6 +80,44 @@ void WaterSample::keyEvent(gp::Keyboard::KeyEvent evt, int key)
 		case gp::Keyboard::KEY_SPACE:
 			m_showBuffers = !m_showBuffers;
 			break;
+		case gp::Keyboard::KEY_W:
+		case gp::Keyboard::KEY_UP_ARROW:
+			m_inputMask |= Button::Forward;
+			break;
+		case gp::Keyboard::KEY_S:
+		case gp::Keyboard::KEY_DOWN_ARROW:
+			m_inputMask |= Button::Back;
+			break;
+		case gp::Keyboard::KEY_A:
+		case gp::Keyboard::KEY_LEFT_ARROW:
+			m_inputMask |= Button::Left;
+			break;
+		case gp::Keyboard::KEY_D:
+		case gp::Keyboard::KEY_RIGHT_ARROW:
+			m_inputMask |= Button::Right;
+			break;
+		}
+	}
+	else if (evt == gp::Keyboard::KEY_RELEASE)
+	{
+		switch (key)
+		{
+		case gp::Keyboard::KEY_W:
+		case gp::Keyboard::KEY_UP_ARROW:
+			m_inputMask &= ~Button::Forward;
+			break;
+		case gp::Keyboard::KEY_S:
+		case gp::Keyboard::KEY_DOWN_ARROW:
+			m_inputMask &= ~Button::Back;
+			break;
+		case gp::Keyboard::KEY_A:
+		case gp::Keyboard::KEY_LEFT_ARROW:
+			m_inputMask &= ~Button::Left;
+			break;
+		case gp::Keyboard::KEY_D:
+		case gp::Keyboard::KEY_RIGHT_ARROW:
+			m_inputMask &= ~Button::Right;
+			break;
 		}
 	}
 }
@@ -126,7 +164,7 @@ void WaterSample::initialize()
 
 	//---render buffer and preview for refraction---//
 	m_refractBuffer = gp::FrameBuffer::create("refractBuffer", bufferSize, bufferSize);
-	
+
 	auto refractDepthTarget = gp::DepthStencilTarget::create("refractDepth", gp::DepthStencilTarget::DEPTH, bufferSize, bufferSize);
 	m_refractBuffer->setDepthStencilTarget(refractDepthTarget);
 	SAFE_RELEASE(refractDepthTarget);
@@ -189,6 +227,12 @@ void WaterSample::update(float dt)
 		force += m_cameraNode->getFirstChild()->getForwardVectorWorld();
 	if (m_inputMask & Button::Back)
 		force -= m_cameraNode->getFirstChild()->getForwardVectorWorld();
+	if (m_inputMask & Button::Left)
+		force += m_cameraNode->getRightVectorWorld();
+	if (m_inputMask & Button::Right)
+		force -= m_cameraNode->getRightVectorWorld();
+
+	if (force.lengthSquared() > 1.f) force.normalize();
 
 	m_cameraAcceleration += force / mass;
 	m_cameraAcceleration *= friction;
