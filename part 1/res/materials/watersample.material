@@ -1,0 +1,65 @@
+material ground
+{
+    technique
+    {
+        pass
+        {
+            vertexShader = res/shaders/textured.vert
+            fragmentShader = res/shaders/textured.frag
+            defines = DIRECTIONAL_LIGHT_COUNT 1
+            
+            u_diffuseColor = 0.1, 0.9, 0.1, 1
+            u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+            
+            u_ambientColor = SCENE_AMBIENT_COLOR
+            u_directionalLightDirection[0] = 0, -1, 0
+	    u_directionalLightColor[0] = 1, 1, 1
+            
+            sampler u_diffuseTexture
+            {
+            	mipmap = true
+	    	wrapS = REPEAT
+	    	wrapT = REPEAT
+	    	minFilter = LINEAR_MIPMAP_LINEAR
+		magFilter = LINEAR
+		
+		path = res/images/water_sample.png
+            }
+            
+            renderState
+            {
+                cullFace = true
+                depthTest = true
+            }
+        }
+    }
+}
+
+material water
+{
+	technique
+	{
+		pass
+		{
+			vertexShader = res/shaders/colored.vert
+			fragmentShader = res/shaders/colored.frag
+            		defines = DIRECTIONAL_LIGHT_COUNT 1
+			
+			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+            		u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+			
+			u_diffuseColor = 0.1, 0.4, 0.9, 1
+			
+			u_ambientColor = SCENE_AMBIENT_COLOR
+			u_directionalLightDirection[0] = 0, -1, 0
+			u_directionalLightColor[0] = 1, 1, 1			
+			renderState
+			{
+				cullFace = true
+				depthTest = true
+			}
+		
+		}
+	}
+}
