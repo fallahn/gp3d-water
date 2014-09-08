@@ -45,6 +45,7 @@ material water
 			vertexShader = res/shaders/watersample.vert
 			fragmentShader = res/shaders/watersample.frag
 			
+			u_worldMatrix = WORLD_MATRIX
 			u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 			u_cameraPosition = CAMERA_WORLD_POSITION
 						

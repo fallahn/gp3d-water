@@ -5,6 +5,7 @@ attribute vec2 a_texCoord;
 
 /////////////////////////////
 // Uniforms
+uniform mat4 u_worldMatrix;
 uniform mat4 u_worldViewProjectionMatrix;
 uniform mat4 u_worldViewProjectionReflectionMatrix;
 
@@ -29,5 +30,5 @@ void main()
 	
 	v_texCoord = a_texCoord;
 	
-	v_eyePosition = u_cameraPosition;
+	v_eyePosition = u_cameraPosition - (u_worldMatrix * a_position);
 }
