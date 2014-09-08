@@ -1,0 +1,3 @@
+Normal map image is taken from Riemer's XNA water article at:
+
+http://www.riemers.net/eng/Tutorials/XNA/Csharp/Series4/Ripples.php
