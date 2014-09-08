@@ -1,3 +1,28 @@
+/*********************************************************************
+Matt Marchant 2014
+http://trederia.blogspot.com
+
+This software is provided 'as-is', without any express or
+implied warranty. In no event will the authors be held
+liable for any damages arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute
+it freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented;
+you must not claim that you wrote the original software.
+If you use this software in a product, an acknowledgment
+in the product documentation would be appreciated but
+is not required.
+
+2. Altered source versions must be plainly marked as such,
+and must not be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any
+source distribution.
+*********************************************************************/
+
 #include <WaterSample.h>
 
 WaterSample game;
@@ -8,12 +33,12 @@ namespace
 	const float mouseSpeed = 0.125f;
 	const float mass = 1.8f;
 	const float friction = 0.9f;
-	const float moveSpeed = 5.5f;
+	const float camSpeed = 5.5f;
 
 	//render target consts
 	const unsigned bufferSize = 512u;
 	const gp::Vector4 clearColour(0.84f, 0.89f, 1.f, 1.f);
-	const float waterOffset = 0.15f;
+	const float waterOffset = 0.55f;
 }
 
 //ctor
@@ -145,18 +170,23 @@ void WaterSample::initialize()
 	m_refractBatch = gp::SpriteBatch::create(m_refractBuffer->getRenderTarget()->getTexture());
 	//----------------------------------------------//
 
-
+	//----add a node to provide light direction-----//
+	auto lightNode = gp::Node::create("lightNode");
+	lightNode->rotateX(MATH_DEG_TO_RAD(-90));
+	m_scene->addNode(lightNode);
 
 	//---bind uniforms to material properties---//
 	auto groundMaterial = m_scene->findNode("Ground")->getModel()->getMaterial();
 	groundMaterial->getParameter("u_clipPlane")->bindValue(this, &WaterSample::m_getClipPlane);
-	groundMaterial->getParameter("u_directionalLightDirection[0]")->bindValue(this, &WaterSample::m_getLightDirection);
+	groundMaterial->getParameter("u_directionalLightDirection[0]")->bindValue(lightNode, &gp::Node::getForwardVectorView);
 
 	auto waterMaterial = m_scene->findNode("Water")->getModel()->getMaterial();
 	auto refractSampler = gp::Texture::Sampler::create(m_refractBuffer->getRenderTarget()->getTexture());
 	waterMaterial->getParameter("u_refractionTexture")->setSampler(refractSampler);
 	SAFE_RELEASE(refractSampler);
 	//------------------------------------------//
+
+	SAFE_RELEASE(lightNode);
 
 	gp::Game::getInstance()->setMouseCaptured(true);
 	gp::Game::getInstance()->setCursorVisible(false);
@@ -194,7 +224,7 @@ void WaterSample::update(float dt)
 	if (m_cameraAcceleration.lengthSquared() < 0.01f)
 		m_cameraAcceleration = gp::Vector3::zero();
 
-	m_cameraNode->translate(m_cameraAcceleration * moveSpeed * (dt / 1000.f));
+	m_cameraNode->translate(m_cameraAcceleration * camSpeed * (dt / 1000.f));
 	//-------------------------------------
 }
 
