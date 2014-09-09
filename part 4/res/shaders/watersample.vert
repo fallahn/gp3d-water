@@ -30,5 +30,5 @@ void main()
 	
 	v_texCoord = a_texCoord;
 	
-	v_eyePosition = u_cameraPosition - (u_worldMatrix * a_position);
+	v_eyePosition = u_cameraPosition - (u_worldMatrix * a_position).xyz;
 }

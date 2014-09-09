@@ -1,7 +1,7 @@
 This repository contains the sample source code to accompany the
 OpenGL / GLES articles at:
 
-http://trederia.blogspot.com/
+http://trederia.blogspot.com/2014/09/water-in-opengl-and-gles-20-part-1.html
 
 Zlib license.
 
