@@ -30,6 +30,8 @@ const vec4 tangent = vec4(1.0, 0.0, 0.0, 0.0);
 const vec4 viewNormal = vec4(0.0, 1.0, 0.0, 0.0);
 const vec4 bitangent = vec4(0.0, 0.0, 1.0, 0.0);
 
+const vec4 waterColour = vec4(0.36, 0.32, 0.2,1.0);
+
 vec2 fromClipSpace(vec4 position)
 {
 	return position.xy / position.w / 2.0 + 0.5;
@@ -47,7 +49,7 @@ void main()
 	//refraction sample
 	vec2 textureCoord = fromClipSpace(v_vertexRefractionPosition) + dudv.rg;
 	textureCoord = clamp(textureCoord, 0.001, 0.999);
-	vec4 refractionColour = texture2D(u_refractionTexture, textureCoord);
+	vec4 refractionColour = texture2D(u_refractionTexture, textureCoord) * waterColour;
 		
 	//reflection sample
 	textureCoord = fromClipSpace(v_vertexReflectionPosition) + dudv.rg;
