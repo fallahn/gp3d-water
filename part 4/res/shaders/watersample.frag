@@ -50,7 +50,22 @@ void main()
 	vec2 textureCoord = fromClipSpace(v_vertexRefractionPosition) + dudv.rg;
 	textureCoord = clamp(textureCoord, 0.001, 0.999);
 	vec4 refractionColour = texture2D(u_refractionTexture, textureCoord) * waterColour;
-		
+	
+	//calc fog distance
+	//----version 1 (exponential)----//
+	//float z = gl_FragCoord.z / gl_FragCoord.w;
+	//const float fogDensity = 0.0005;
+	//float fogAmount = exp2(-fogDensity * fogDensity * z * z * 1.442695);
+	//fogAmount = clamp(fogAmount, 0.0, 0.7);
+	
+	//----version 2 (linear)----//
+	float z = (gl_FragCoord.z / gl_FragCoord.w) / 300.0; //const is max fog distance
+	const float fogDensity = 6.0;
+	float fogAmount = z * fogDensity;	
+	fogAmount = clamp(fogAmount, 0.0, 1.0);
+	
+	refractionColour = mix(refractionColour, waterColour, fogAmount);
+	
 	//reflection sample
 	textureCoord = fromClipSpace(v_vertexReflectionPosition) + dudv.rg;
 	textureCoord = clamp(textureCoord, 0.001, 0.999);	
