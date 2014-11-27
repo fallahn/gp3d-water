@@ -6,6 +6,7 @@ http://trederia.blogspot.com/2014/09/water-in-opengl-and-gles-20-part-1.html
 Zlib license.
 
 /*********************************************************************
+
 Matt Marchant 2014
 http://trederia.blogspot.com
 
@@ -28,10 +29,11 @@ and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any
 source distribution.
+
 *********************************************************************/
 
 This software depends on gameplay3D, see
 
-https://github.com/blackberry/GamePlay
+https://github.com/gameplay3d/GamePlay
 
 for more details.
